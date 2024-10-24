@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "696081762751",
+    "project_id": "fir-database-practice-f45ff",
+    "storage_bucket": "fir-database-practice-f45ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696081762751:android:c37b2b7b0d023f8b74390a",
+        "android_client_info": {
+          "package_name": "com.example.fb_db_practice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXxrQUFrSmNeVyHf3ii8CNGpjmg02eQpU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
