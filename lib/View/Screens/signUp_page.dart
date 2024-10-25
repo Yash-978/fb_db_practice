@@ -126,8 +126,8 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final formKey = GlobalKey<FormState>();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -140,161 +140,132 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       body: Form(
         key: formKey,
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SizedBox(
-              width: w * .9,
-              child: TextFormField(
-                validator: (value) =>
-                    value!.isEmpty ? "Email cannot be empty." : null,
-                controller: _emailController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  label: Text("Email"),
-                ),
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-              width: w * 0.9,
-              child: TextFormField(
-                validator: (value) => value!.length < 8
-                    ? "Password should have at least 8 characters."
-                    : null,
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  label: Text("Password"),
-                ),
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-              height: 65,
-              width: w * .9,
-              child: ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      AuthService()
-                          .createAccountWithEmail(
-                              _emailController.text, _passwordController.text)
-                          .then((value) {
-                        if (value == "Account Created") {
-                          Get.snackbar(
-                              "Account info", "Account created successfully");
-                          Get.offAndToNamed('/home');
-                        } else {
-                          Get.snackbar(
-                              "Account info","$value",backgroundColor: Colors.red);
-                        }
-                        // if (value == "Account Created") {
-                        //   ScaffoldMessenger.of(context).showSnackBar(
-                        //       SnackBar(content: Text("Account Created")));
-                        //   Navigator.pushReplacementNamed(
-                        //       context, '/androidHome');
-                        //   // Navigator.pushNamed(context, '/androidHome');
-                        // } else {
-                        //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        //     content: Text(
-                        //       value,
-                        //       style: TextStyle(color: Colors.white),
-                        //     ),
-                        //     backgroundColor: Colors.red.shade400,
-                        //   ));
-                        // }
-                      });
-                    }
-                  },
-                  child: Text(
-                    "Sign Up",
-                    style: TextStyle(fontSize: 16),
-                  ))),
-          SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            width: w * 0.9,
-            height: h * 0.06,
-            child: OutlinedButton(
-              onPressed: () {
-                AuthService().continueWithGoogle().then((value) {
-                  if (value == "Google Login Successful") {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Google Login Successful")));
-                    Navigator.pushReplacementNamed(context, "/androidHome");
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                        value,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.red.shade400,
-                    ));
-                  }
-                });
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "assets/images/googleLogo.png",
-                    height: 30,
-                    width: 30,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+                width: w * .9,
+                child: TextFormField(
+                  validator: (value) =>
+                      value!.isEmpty ? "Email cannot be empty." : null,
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    label: Text("Email"),
                   ),
-                  Text("Continue with Google"),
-                ],
-              ),
+                )),
+            SizedBox(
+              height: 10,
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Already have Account!",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
-              TextButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      AuthService()
-                          .createAccountWithEmail(
-                              _emailController.text, _passwordController.text)
-                          .then(
-                        (value) {
+            SizedBox(
+                width: w * 0.9,
+                child: TextFormField(
+                  validator: (value) => value!.length < 8
+                      ? "Password should have at least 8 characters."
+                      : null,
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    label: Text("Password"),
+                  ),
+                )),
+            SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+                height: 65,
+                width: w * .9,
+                child: ElevatedButton(
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        AuthService()
+                            .createAccountWithEmail(
+                                emailController.text, passwordController.text)
+                            .then((value) {
                           if (value == "Account Created") {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("Account Created")));
+                            Get.snackbar(
+                                "Account info", "Account created successfully");
+                            Get.offAllNamed('/home');
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  value,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                backgroundColor: Colors.red.shade400,
-                              ),
-                            );
+                            Get.snackbar("Account info", "$value",
+                                backgroundColor: Colors.red);
                           }
-                        },
+                        });
+                      }
+                    },
+                    child: Text(
+                      "Sign Up",
+                      style: TextStyle(fontSize: 16),
+                    ))),
+            SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              width: w * 0.9,
+              height: h * 0.06,
+              child: OutlinedButton(
+                onPressed: () {
+                  // AuthService().continueWithGoogle().then((value) {
+                  //   if (value == "Google Login Successful") {
+                  //     Get.snackbar("Account info", "Google Login Successful");
+                  //   } else {
+                  //     Get.snackbar("Account info", "$value",
+                  //         backgroundColor: Colors.red);
+                  //   }
+                  // });
+                  AuthService().continueWithGoogle().then((value) {
+                    if (value == "Google Login Successful") {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Google Login Successful")));
+                      Navigator.pushReplacementNamed(context, "/home");
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            value,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          backgroundColor: Colors.red.shade400,
+                        ),
                       );
                     }
-                    // Navigator.pushNamed(context, "/signUp");
+                  });
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      "assets/images/googleLogo.png",
+                      height: 30,
+                      width: 30,
+                    ),
+                    Text("Continue with Google"),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Already have Account!",
+                ),
+                TextButton(
+                  onPressed: () {
+                    Get.toNamed('/login');
                   },
                   child: Text(
                     "Login",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ))
-            ],
-          )
-        ]),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

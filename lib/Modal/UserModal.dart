@@ -1,55 +1,31 @@
-class UserModal {
-  String? name, profilePicUrl, gender, maritalStatus, preferredContactMethod;
-  bool receiveNotification;
-  DateTime? dateOfBirth;
+class UserInfoModal {
+  String? name, email;
+  int? id;
+  int? phone;
 
-  UserModal({
-    required this.name,
-    required this.profilePicUrl,
-    required this.gender,
-    required this.maritalStatus,
-    required this.preferredContactMethod,
-    this.receiveNotification = false,
-    required this.dateOfBirth,
+  UserInfoModal({
+     this.name,
+     this.email,
+     this.phone,
+     this.id,
   });
 
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'dateOfBirth': dateOfBirth,
-      'profilePicUrl': profilePicUrl,
-      'receiveNotification': receiveNotification,
-      'gender': gender,
-      'maritalStatus': maritalStatus,
-      'preferredContactMethod': preferredContactMethod,
-    };
+  factory UserInfoModal.fromJson(Map m1) {
+    return UserInfoModal(
+      id: m1['id'],
+      name: m1['name'],
+      email: m1['email'],
+      phone: m1['phone'],
+
+    );
   }
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
-      'dateOfBirth': dateOfBirth?.toIso8601String(),
-      'profilePicUrl': profilePicUrl,
-      'receiveNotification': receiveNotification ? 1 : 0,
-      'gender': gender,
-      'maritalStatus': maritalStatus,
-      'preferredContactMethod': preferredContactMethod,
+      'email': email,
+      'phone': phone,
     };
   }
-
-  factory UserModal.fromJson(Map m1) {
-    return UserModal(
-      name: m1['name'],
-      profilePicUrl: m1['profilePicUrl'],
-      gender: m1['gender'],
-      maritalStatus: m1['maritalStatus'],
-      preferredContactMethod: m1['preferredContactMethod'],
-      dateOfBirth: m1['dateOfBirth'],
-    );
-  }
-}
-
-
-class UserInfoModal{
-  // String? name,
 }
