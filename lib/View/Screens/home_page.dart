@@ -9,7 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-var controller = Get.put(HomeController());
+/*var controller = Get.put(HomeController());
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -59,7 +59,7 @@ class HomePage extends StatelessWidget {
             ),
             ListTile(
               onTap: () {
-                AuthService().logout();
+                AuthService.authService.logout();
                 Get.snackbar(
                     FirebaseAuth.instance.currentUser!.email.toString(),
                     "is Logged Out");
@@ -154,4 +154,4 @@ void clearField() {
   controller.txtName.clear();
   controller.txtEmail.clear();
   controller.txtPhone.clear();
-}
+}*/

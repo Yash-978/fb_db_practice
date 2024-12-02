@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fb_db_practice/Modal/UserModal.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class CRUDServices {
+class FirebaseService {
+  FirebaseService._();
+  static FirebaseService firebaseService=FirebaseService._();
   User? user = FirebaseAuth.instance.currentUser;
 
-  Future addDataToFireStore(UserInfoModal userInfo) async {
+  Future addDataToFireStore(UserDataModal userInfo) async {
     try {
       await FirebaseFirestore.instance
           .collection("users")
@@ -20,14 +22,16 @@ class CRUDServices {
 
   Stream<QuerySnapshot> readDataFromFireStore() async* {
     try {
-      var userdata =await FirebaseFirestore.instance
+      var userdata = await FirebaseFirestore.instance
           .collection("users")
           .doc(user!.email)
-          .collection("usersData").orderBy('name')
+          .collection("usersData")
+          // .orderBy('name')
           .snapshots();
       yield* userdata;
     } catch (e) {
       print(e.toString());
     }
   }
+
 }

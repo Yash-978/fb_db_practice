@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../Service/AuthService.dart';
 
-class LoginPage extends StatefulWidget {
+/*class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
@@ -127,11 +127,11 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     Get.toNamed('/signup');
                   },
-                  child: Text("Sign Up"))
+                  child: Text("Sign Up"),),
             ],
           )
         ]),
       ),
     );
   }
-}
+}*/

@@ -117,7 +117,7 @@ import 'package:get/get.dart';
     );
   }
 }*/
-class SignUpPage extends StatefulWidget {
+/*class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
   @override
@@ -269,4 +269,4 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
-}
+}*/

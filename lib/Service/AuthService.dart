@@ -2,7 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
-  // create new account using email password method
+
+  AuthService._();
+
+  static AuthService authService = AuthService._();
+
   Future<String> createAccountWithEmail(String email, String password) async {
     try {
       await FirebaseAuth.instance

@@ -1,3 +1,4 @@
+/*
 import 'package:fb_db_practice/Controller/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -176,6 +177,217 @@ Widget updateDataDialog(
             Get.back();
           },
           child: Text('Cancel')),
+    ],
+  );
+}
+*/
+
+
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../Controller/controller.dart';
+import '../../Modal/UserModal.dart';
+
+
+Widget entryDialogue(double h, w, HomeController homeController) {
+  return AlertDialog(
+    title: Text('Add Data'),
+    content: SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextFormField(
+            controller: homeController.txtId,
+            decoration: InputDecoration(
+              label: Text("Id"),
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(
+            height: 7,
+          ),
+          TextFormField(
+            controller: homeController.txtName,
+            decoration: InputDecoration(
+              label: Text("Name"),
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(
+            height: 7,
+          ),
+          TextFormField(
+            controller: homeController.txtAge,
+            decoration: InputDecoration(
+              label: Text("Age"),
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+            controller: homeController.txtPhone,
+            decoration: InputDecoration(
+              label: Text("Phone"),
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(
+            height: 7,
+          ),
+          TextFormField(
+            controller: homeController.txtSalary,
+            decoration: InputDecoration(
+              label: Text("Salary"),
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ],
+      ),
+    ),
+    actions: [
+      TextButton(
+        onPressed: () {
+          Get.back();
+        },
+        child: Text('Cancel'),
+      ),
+      TextButton(
+          onPressed: () {
+            String name = homeController.txtName.text;
+            int id = int.parse(homeController.txtId.text);
+            int age = int.parse(homeController.txtAge.text);
+            int phone = int.parse(homeController.txtPhone.text);
+            double salary = double.parse(homeController.txtSalary.text);
+            UserDataModal user = UserDataModal(
+              name: name,
+              id: id,
+              age: age,
+              salary: salary,
+              phone: phone,
+            );
+            homeController.insertRecord(user);
+            homeController.uploadDataToFirestore(user);
+            // DbHelper.dbHelper.insertData(user);
+            homeController.txtId.clear();
+            homeController.txtName.clear();
+            homeController.txtAge.clear();
+            homeController.txtSalary.clear();
+            homeController.txtPhone.clear();
+
+            Get.back();
+          },
+          child: Text('Save'))
+    ],
+  );
+}
+
+Widget  updateDialogue(
+    double h, w, HomeController homeController, int index, int id) {
+  int pastId= homeController.userList[index].id!;
+  homeController.txtId =
+      TextEditingController(text: homeController.userList[index].id.toString());
+  homeController.txtName =
+      TextEditingController(text: homeController.userList[index].name);
+  homeController.txtAge = TextEditingController(
+      text: homeController.userList[index].age.toString());
+  homeController.txtSalary = TextEditingController(
+      text: homeController.userList[index].salary.toString());
+  homeController.txtPhone = TextEditingController(
+      text: homeController.userList[index].phone.toString());
+
+  return AlertDialog(
+    title: Text('Update Data'),
+    content: SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextFormField(
+            controller: homeController.txtId,
+            decoration: InputDecoration(
+              label: Text("Id"),
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+            controller: homeController.txtName,
+            decoration: InputDecoration(
+              label: Text("Name"),
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+            controller: homeController.txtAge,
+            decoration: InputDecoration(
+              label: Text("Age"),
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+            controller: homeController.txtPhone,
+            decoration: InputDecoration(
+              label: Text("Phone"),
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+            controller: homeController.txtSalary,
+            decoration: InputDecoration(
+              label: Text("Salary"),
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ],
+      ),
+    ),
+    actions: [
+      TextButton(
+        onPressed: () {
+          Get.back();
+        },
+        child: Text('Cancel'),
+      ),
+      TextButton(
+          onPressed: () {
+            String name = homeController.txtName.text;
+            int id = int.parse(homeController.txtId.text);
+            int age = int.parse(homeController.txtAge.text);
+            int phone = int.parse(homeController.txtPhone.text);
+            double salary = double.parse(homeController.txtSalary.text);
+            UserDataModal user = UserDataModal(
+              name: name,
+              id: id,
+              age: age,
+              salary: salary,
+              phone: phone,
+            );
+            homeController.updateRecords(user, pastId);
+
+            homeController.txtId.clear();
+            homeController.txtName.clear();
+            homeController.txtAge.clear();
+            homeController.txtSalary.clear();
+            homeController.txtPhone.clear();
+
+
+            Get.back();
+          },
+          child: Text('Update'))
     ],
   );
 }
