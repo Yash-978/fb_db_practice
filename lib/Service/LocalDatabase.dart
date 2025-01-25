@@ -1,5 +1,10 @@
+// import 'package:get/get.dart';
+import 'dart:convert';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 import '../Modal/UserModal.dart';
 
@@ -141,10 +146,9 @@ class DatabaseHelper {
 class DbHelper {
   DbHelper._();
 
+  static DbHelper dbHelper = DbHelper._();
   String databaseName = 'userData.db';
   String tableName = 'userData';
-
-  static DbHelper dbHelper = DbHelper._();
 
   Database? _database;
 
@@ -221,5 +225,180 @@ class DbHelper {
     ''';
     List args = ['%$value%'];
     return await db!.rawQuery(sql, args);
+  }
+}
+
+class DatabaseHelper {
+  DatabaseHelper._();
+
+  static DatabaseHelper databaseHelper = DatabaseHelper._();
+  String databaseName = "databaseName.db";
+  String tableName = "tableName";
+
+  Database? _database;
+
+// Future<Database?> get database async => _database ?? await initDatabase();
+  Future<Database?> get database async => _database ?? await initDatabase();
+
+  Future<Database?> initDatabase() async {
+    final path = await getDatabasesPath();
+    final dbpath = join(path, databaseName);
+
+    _database = await openDatabase(
+      dbpath,
+      version: 1,
+      onCreate: (db, version) {
+        String sql = '''
+        CREATE TABLE $tableName (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        number TEXT,
+        
+        
+        )
+        ''';
+        db.execute(sql);
+      },
+    );
+    return _database;
+  }
+}
+
+class DataHelper {
+  // Singleton Instance
+  DataHelper._();
+
+  static final DbHelper instance = DbHelper._();
+
+  // Database Properties
+  static const String _databaseName = 'userData.db';
+  static const String _tableName = 'userData';
+  Database? _database;
+
+  // Getter for Database (Lazy Initialization)
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+    _database = await _initDatabase();
+    return _database!;
+  }
+
+  // Initialize Database
+  Future<Database> _initDatabase() async {
+    final path = join(await getDatabasesPath(), _databaseName);
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: (db, version) async {
+        await db.execute('''
+          CREATE TABLE $_tableName (
+            id INTEGER PRIMARY KEY,
+            name TEXT NOT NULL,
+            age INTEGER NOT NULL,
+            phone INTEGER NOT NULL,
+            salary REAL NOT NULL
+          )
+        ''');
+      },
+    );
+  }
+
+  // Insert Data
+  Future<void> insertData(Map<String, dynamic> user) async {
+    final db = await database;
+    await db.insert(_tableName, user);
+  }
+
+  // Read Data
+  Future<List<Map<String, dynamic>>> readData() async {
+    final db = await database;
+    return await db.query(_tableName);
+  }
+
+  // Update Data
+  Future<void> updateData(Map<String, dynamic> user, int id) async {
+    final db = await database;
+    await db.update(
+      _tableName,
+      user,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // Delete Data
+  Future<void> deleteData(int id) async {
+    final db = await database;
+    await db.delete(
+      _tableName,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // Search Data
+  Future<List<Map<String, dynamic>>> searchData(String query) async {
+    final db = await database;
+    return await db.query(
+      _tableName,
+      where: 'name LIKE ?',
+      whereArgs: ['%$query%'],
+    );
+  }
+}
+
+class ApiHelper {
+  Future<List> fetchData() async {
+    String api = '';
+    Uri url = Uri.parse(api);
+    Response response = await http.get(url);
+    if (response.statusCode == 200) {
+      final json = response.body;
+      final List data = jsonDecode(json);
+      return data;
+    } else {
+      return [];
+    }
+  }
+}
+
+class LocalDatabaseHelper {
+  LocalDatabaseHelper._();
+
+  static LocalDatabaseHelper localDatabaseHelper = LocalDatabaseHelper._();
+
+  String databaseName = 'databaseName.db';
+  String tableName = 'tableName';
+
+  Database? _database;
+
+//Future<Database?> get database async => _database ?? await initDatabase();
+  Future<Database?> get database async => _database ?? await initDatabase();
+
+  Future<Database?> initDatabase() async {
+    final path = await getDatabasesPath();
+    final dbPath = join(path, databaseName);
+
+    _database = await openDatabase(
+      version: 1,
+      dbPath,
+      onCreate: (db, version) async {
+        String sql = '''
+        CREATE TABLE $tableName (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        surname TEXT,
+        fatherName TEXT
+        )
+        ''';
+        await db.execute(sql);
+      },
+    );
+
+    return _database;
+  }
+
+  Future<void> insertData() async {
+    Database? db = await database;
+    // db.insert(tableName, );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/flutter_login.dart';
 import 'package:get/get.dart';
 
 import '../../Service/AuthService.dart';
@@ -135,3 +136,88 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }*/
+class CheckUser extends StatefulWidget {
+  @override
+  _CheckUserState createState() => _CheckUserState();
+}
+
+class _CheckUserState extends State<CheckUser> {
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+  }
+
+  void _checkLoginStatus() async {
+    bool isLoggedIn = await AuthService.authService.isLoggedIn();
+    if (isLoggedIn) {
+      Get.offAllNamed('/home');
+    } else {
+      Get.offAllNamed('/login');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(child: CircularProgressIndicator()),
+    );
+  }
+}
+
+class LoginScreen extends StatelessWidget {
+  Duration get loginTime => Duration(milliseconds: 2250);
+
+  Future<String?> _authUser(LoginData data) async {
+    String result =
+    await AuthService.authService.loginWithEmail(data.name, data.password);
+    return result == "Login Successful" ? null : result;
+  }
+
+  Future<String?> _signupUser(SignupData data) async {
+    String result = await AuthService.authService
+        .createAccountWithEmail(data.name!, data.password!);
+    return result == "Account Created" ? null : result;
+  }
+
+  Future<String?> _recoverPassword(String email) async {
+    // Mock password recovery
+    return email == "test@example.com"
+        ? null
+        : "User not found. Please try again.";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FlutterLogin(
+      title: 'MyApp',
+      onLogin: _authUser,
+      onSignup: _signupUser,
+      onRecoverPassword: _recoverPassword,
+      onSubmitAnimationCompleted: () async {
+        await Future.delayed(Duration(milliseconds: 500));
+        Get.offAllNamed('/home');
+      },
+      theme: LoginTheme(
+        primaryColor: Colors.blue,
+        accentColor: Colors.white,
+        buttonTheme: LoginButtonTheme(
+          splashColor: Colors.green,
+          backgroundColor: Colors.blueAccent,
+          highlightColor: Colors.lightBlue,
+        ),
+      ),
+      messages: LoginMessages(
+        userHint: 'Email',
+        passwordHint: 'Password',
+        confirmPasswordHint: 'Confirm Password',
+        loginButton: 'LOGIN',
+        signupButton: 'SIGN UP',
+        recoverPasswordButton: 'Forgot Password?',
+        recoverPasswordDescription:
+        'We will send you instructions to reset your password.',
+        goBackButton: 'GO BACK',
+      ),
+    );
+  }
+}

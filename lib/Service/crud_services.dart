@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseService {
   FirebaseService._();
-  static FirebaseService firebaseService=FirebaseService._();
+  static FirebaseService firebaseService = FirebaseService._();
   User? user = FirebaseAuth.instance.currentUser;
 
   Future addDataToFireStore(UserDataModal userInfo) async {
