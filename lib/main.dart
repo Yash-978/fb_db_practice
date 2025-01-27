@@ -1,26 +1,22 @@
-import 'package:fb_db_practice/Service/AuthService.dart';
-import 'package:fb_db_practice/View/Screens/home_page.dart';
-import 'package:fb_db_practice/View/Screens/signUp_page.dart';
-import 'package:fb_db_practice/utils/global.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fb_db_practice/image_uploader_app/view/screens/auth/check_user.dart';
+import 'package:fb_db_practice/image_uploader_app/view/screens/auth/login_page.dart';
+import 'package:fb_db_practice/image_uploader_app/view/screens/auth/sign_up.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_login/flutter_login.dart';
-import 'package:get/get.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-import 'Controller/controller.dart';
-import 'Service/LocalDatabase.dart';
-import 'Service/crud_services.dart';
-import 'View/Component/dialogBox.dart';
-import 'View/Screens/home.dart';
-import 'View/Screens/login_page.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'package:provider/provider.dart';
+
 import 'firebase_options.dart';
+import 'image_uploader_app/provider/provider.dart';
+import 'image_uploader_app/view/screens/home/home_page.dart';
+import 'image_uploader_app/view/screens/image_upload_screen/image_upload.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'dart:io';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +33,35 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
+
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => ImageUploadProvider(),
+        ),
+      ],
+      builder: (context, child) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/login',
+        routes: {
+          '/login': (context) => LoginPage(),
+          // '/': (context) => CheckUser(),
+          '/signup': (context) => SignUpPage(),
+          '/home': (context) => UserHomePage(),
+          '/upload': (context) => UploadImage(),
+        },
+      ),
+    );
+  }
+}
+
+
+/*class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
@@ -66,8 +90,7 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-}
-
+}*/
 /*
 flutter pub add get
 google_sign_in

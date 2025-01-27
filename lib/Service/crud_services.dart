@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseService {
   FirebaseService._();
+
   static FirebaseService firebaseService = FirebaseService._();
   User? user = FirebaseAuth.instance.currentUser;
 
@@ -20,6 +21,8 @@ class FirebaseService {
     }
   }
 
+  void readUserFromFireStore() {}
+
   Stream<QuerySnapshot> readDataFromFireStore() async* {
     try {
       var userdata = await FirebaseFirestore.instance
@@ -33,5 +36,4 @@ class FirebaseService {
       print(e.toString());
     }
   }
-
 }
