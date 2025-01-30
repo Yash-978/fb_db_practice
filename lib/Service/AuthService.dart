@@ -1,18 +1,23 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'dart:convert';
-import 'dart:typed_data';
+
 import 'package:http/http.dart' as http;
+
+import '../image_uploader_app/service/firestore_service.dart';
 
 class AuthService {
   AuthService._();
 
   static AuthService authService = AuthService._();
 
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
   Future<String> createAccountWithEmail(String email, String password) async {
     try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+      await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
       return "Account Created";
     } on FirebaseAuthException catch (e) {
       return e.message.toString();
@@ -22,8 +27,9 @@ class AuthService {
   // login with email password method
   Future<String> loginWithEmail(String email, String password) async {
     try {
-      await FirebaseAuth.instance
+      UserCredential userCredential = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
+      FirestoreService.instance.storeUserInFirestore(userCredential.user);
       return "Login Successful";
     } on FirebaseAuthException catch (e) {
       return e.message.toString();
@@ -55,7 +61,9 @@ class AuthService {
       final creds = GoogleAuthProvider.credential(
           accessToken: gAuth.accessToken, idToken: gAuth.idToken);
       // sign in with the credentials
-      await FirebaseAuth.instance.signInWithCredential(creds);
+     UserCredential userCredential= await FirebaseAuth.instance.signInWithCredential(creds);
+
+      FirestoreService.instance.storeUserInFirestore(userCredential.user);
       return "Google Login Successful";
     } on FirebaseAuthException catch (e) {
       return e.message.toString();
@@ -73,8 +81,44 @@ class AuthService {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
+    UserCredential userCredential =
+        await _firebaseAuth.signInWithCredential(credential);
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    // return await FirebaseAuth.instance.signInWithCredential(credential);
+
+    FirestoreService.instance.storeUserInFirestore(userCredential.user);
+    return userCredential;
+  }
+
+/*
+Future<void> signInWithGoogle() async {
+  try {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
+    final OAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    UserCredential userCredential = await auth.signInWithCredential(credential);
+
+    // Store the user in Firestore
+    storeUserInFirestore(userCredential.user);
+  } catch (e) {
+    print("Error signing in with Google: $e");
   }
 }
-
+*/
+  User? getCurrentUser() {
+    try {
+      User? user = _firebaseAuth.currentUser;
+      if (user != null) {
+        log('Current user email: ${user.email}');
+      }
+      return user;
+    } catch (e) {
+      log('Failed to get current user: $e');
+      return null;
+    }
+  }
+}

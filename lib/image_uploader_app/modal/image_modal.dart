@@ -1,7 +1,7 @@
 class ImageUploadModal {
-  int status;
-  bool success;
-  Data data;
+  late int status;
+  late bool success;
+  late Data data;
 
   ImageUploadModal({
     required this.status,
@@ -9,14 +9,13 @@ class ImageUploadModal {
     required this.data,
   });
 
-  factory ImageUploadModal.fromMap(Map json){
+  factory ImageUploadModal.fromMap(Map json) {
     return ImageUploadModal(
       status: json["status"],
       success: json["success"],
       data: Data.fromMap(json["data"]),
     );
   }
-
 
   Map<String, dynamic> toMap() => {
         "status": status,
@@ -26,35 +25,35 @@ class ImageUploadModal {
 }
 
 class Data {
-  String id;
-  String deletehash;
-  dynamic accountId;
-  dynamic accountUrl;
-  dynamic adType;
-  dynamic adUrl;
-  String title;
-  String description;
-  String name;
-  String type;
-  int width;
-  int height;
-  int size;
-  int views;
-  dynamic section;
-  dynamic vote;
-  int bandwidth;
-  bool animated;
-  bool favorite;
-  bool inGallery;
-  bool inMostViral;
-  bool hasSound;
-  bool isAd;
-  dynamic nsfw;
-  String link;
-  List<dynamic> tags;
-  int datetime;
-  String mp4;
-  String hls;
+  late String id;
+  late String deletehash;
+  late dynamic accountId;
+  late dynamic accountUrl;
+  late dynamic adType;
+  late dynamic adUrl;
+  late String title;
+  late String description;
+  late String name;
+  late String type;
+  late int width;
+  late int height;
+  late int size;
+  late int views;
+  late dynamic section;
+  late dynamic vote;
+  late int bandwidth;
+  late bool animated;
+  late bool favorite;
+  late bool inGallery;
+  late bool inMostViral;
+  late bool hasSound;
+  late bool isAd;
+  late dynamic nsfw;
+  late String link;
+  late List<dynamic> tags;
+  late int datetime;
+  late String mp4;
+  late String hls;
 
   Data({
     required this.id,

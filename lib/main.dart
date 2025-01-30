@@ -4,14 +4,18 @@ import 'package:fb_db_practice/image_uploader_app/view/screens/auth/login_page.d
 import 'package:fb_db_practice/image_uploader_app/view/screens/auth/sign_up.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:provider/provider.dart';
 
+import 'Service/AuthService.dart';
 import 'firebase_options.dart';
 import 'image_uploader_app/provider/provider.dart';
+import 'image_uploader_app/service/firestore_service.dart';
 import 'image_uploader_app/view/screens/home/home_page.dart';
 import 'image_uploader_app/view/screens/image_upload_screen/image_upload.dart';
 import 'dart:convert';
@@ -33,33 +37,56 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => ImageUploadProvider(),
+    // return MultiProvider(
+    //   providers: [
+    //     ChangeNotifierProvider(
+    //       create: (context) => ImageUploadProvider(),
+    //     ),
+    //   ],
+    //   builder: (context, child) => MaterialApp(
+    //     debugShowCheckedModeBanner: false,
+    //     initialRoute: '/login',
+    //     routes: {
+    //       '/login': (context) => LoginPage(),
+    //       // '/': (context) => CheckUser(),
+    //       '/signup': (context) => SignUpPage(),
+    //       '/home': (context) => UserHomePage(),
+    //       '/upload': (context) => UploadImage(),
+    //     },
+    //   ),
+    // );
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      getPages: [
+        GetPage(
+          name: '/',
+          page: () => CheckUser(),
         ),
+        GetPage(
+          name: '/login',
+          page: () => LoginPage(),
+        ),
+        GetPage(
+          name: '/signUp',
+          page: () => SignUpPage(),
+        ),
+        GetPage(
+          name: '/user-home',
+          page: () => UserHomePage(),
+        ),
+        GetPage(
+          name: '/upload-image',
+          page: () => UploadImage(),
+        )
       ],
-      builder: (context, child) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        initialRoute: '/login',
-        routes: {
-          '/login': (context) => LoginPage(),
-          // '/': (context) => CheckUser(),
-          '/signup': (context) => SignUpPage(),
-          '/home': (context) => UserHomePage(),
-          '/upload': (context) => UploadImage(),
-        },
-      ),
     );
   }
 }
-
 
 /*class MyApp extends StatelessWidget {
   const MyApp({super.key});
